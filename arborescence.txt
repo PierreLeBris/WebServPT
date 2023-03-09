@@ -1,0 +1,75 @@
+chaine de base : localhost:8000/ 
+affiche les bdd et les créer ( Donc GET, POST, DELETE)
+
+localhost:8000/bdd
+affiche les tables de la bdd selectionnée, création tables et modification tables ( Donc GET, POST, PUT, DELETE)
+
+localhost:8000/bdd/table
+affiche les colonnes de la table selectionnée, création de colonnes, modification des colonnes ( Donc GET, POST, PUT, DELETE )
+
+localhost:8000/bdd/table/colonne
+affiche les données présentes dans la colonne selectionnée, création des données, modification des données ( Donc GET, POST, PUT, DELETE )
+
+#################################################################################################################################################################
+
+bdd1
+{
+    table1
+    {
+        user1
+        {
+            id
+            nom
+        }
+        user2
+        {
+            id
+            nom
+        }
+    }
+
+    table2
+    {
+        item1
+        {
+            id
+            nom
+        }
+        item2
+        {
+            id
+            nom
+        }
+    }
+}
+
+bdd2
+{
+    table1
+    {
+        user1
+        {
+            id
+            nom
+        }
+        user2
+        {
+            id
+            nom
+        }
+    }
+
+    table2
+    {
+        item1
+        {
+            id
+            nom
+        }
+        item2
+        {
+            id
+            nom
+        }
+    }
+}
