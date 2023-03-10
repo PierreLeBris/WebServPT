@@ -7,8 +7,10 @@ affiche les tables de la bdd selectionnée, création tables et modification tab
 localhost:8000/bdd/table
 affiche les colonnes de la table selectionnée, création de colonnes, modification des colonnes ( Donc GET, POST, PUT, DELETE )
 
-localhost:8000/bdd/table/colonne
-affiche les données présentes dans la colonne selectionnée, création des données, modification des données ( Donc GET, POST, PUT, DELETE )
+localhost:8000/bdd/table/containtes
+
+localhost:8000/bdd/table/data
+affiche les données présentes, création des données, modification des données ( Donc GET, POST, PUT, DELETE )
 
 #################################################################################################################################################################
 
@@ -16,15 +18,20 @@ bdd1
 {
     table1
     {
-        user1
+        containtes
         {
-            id
-            nom
+            /*la structure de ce qu'on stocke dans la table */
         }
-        user2
+        Data
         {
-            id
-            nom
+            user1
+            {
+               
+            }
+            user2
+            {
+
+            }
         }
     }
 
