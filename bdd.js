@@ -65,7 +65,29 @@ var server = http.createServer(function (req, res) {
                 console.log(BaseDeDonnees);
                 res.end('{Table created}');
             });
-        } 
+        }
+        else if (req.method === 'PUT' && BaseDeDonnees[pathBdd]) {
+            var body = '';
+            res.writeHead(200, {'Content-type': 'application/json'});
+            req.on('data', function (data) {
+                body += data.toString();
+            });
+            req.on('end', function () {
+                BaseDeDonnees[body] = BaseDeDonnees[pathBdd];
+                delete BaseDeDonnees[pathBdd];
+                console.log(BaseDeDonnees);
+                res.end('{bdd altered}');
+            }); 
+        }
+        else if (req.method === 'DELETE' && BaseDeDonnees[pathBdd]) {
+            res.writeHead(200, {'Content-type': 'application/json'});
+            req.on('data', function () {});
+            req.on('end', function () {
+                delete BaseDeDonnees[pathBdd];
+                console.log(BaseDeDonnees);
+                res.end('{bdd deleted}');
+            });
+        }
         else {
             res.writeHead(404, {'Content-type': 'text/plain'});
             res.end('Not Found');
