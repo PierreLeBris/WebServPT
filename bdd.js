@@ -11,7 +11,6 @@ var server = http.createServer(function (req, res) {
         if (req.method === 'GET') {
             res.writeHead(200, {'Content-type': 'application/json'});
             if (BaseDeDonnees) {
-                //console.log(BaseDeDonnees);
                 const bddName = Object.keys(BaseDeDonnees);
                 res.end(JSON.stringify(bddName));
             } else {
@@ -26,11 +25,20 @@ var server = http.createServer(function (req, res) {
             });
             res.writeHead(200, {'Content-type': 'text/plain'});
             req.on('end', function () {
-                if (!BaseDeDonnees[body]) {
-                BaseDeDonnees[body] = {};
-            }
-            console.log(BaseDeDonnees);
-            res.end('{Database created}');
+                if (!body) {
+                    res.writeHead(404, {'Content-type': 'text/plain'});
+                    res.end('{Error: Database name can not be empty}')
+                }
+                else {
+                    if (!BaseDeDonnees[body]) {
+                        BaseDeDonnees[body] = {};
+                        res.end('{Database created}');
+                    }
+                    else {
+                        res.writeHead(404, {'Content-type': 'text/plain'});
+                        res.end('{DataBase already exist}');
+                    }
+                }
             });
         }
         else {
@@ -41,58 +49,85 @@ var server = http.createServer(function (req, res) {
     }
     else if (!path || path !== '/') {
         pathBdd = path.split('/')[1];
-        console.log(pathBdd);
-        if (req.method === 'GET') {
-            res.writeHead(200, {'Content-type': 'application/json'});
-            if (BaseDeDonnees[pathBdd]) {
-                res.end(JSON.stringify(BaseDeDonnees[pathBdd]));
-            } else {
-                res.writeHead(404, {'Content-type': 'text/plain'});
-                res.end('Not Found');
+        pathTable = '';
+        if (path.split('/')[2]) {
+            pathTable = path.split('/')[2];
+        }
+
+        if (pathTable === '') {
+            if (req.method === 'GET') {
+                res.writeHead(200, {'Content-type': 'application/json'});
+                if (BaseDeDonnees[pathBdd]) {
+                    res.end(JSON.stringify(BaseDeDonnees[pathBdd]));
+                } else {
+                    res.writeHead(404, {'Content-type': 'text/plain'});
+                    res.end('Not Found');
+                }
+            }
+            else if (req.method === 'POST' && BaseDeDonnees[pathBdd]) {
+                var body = '';
+                res.writeHead(200, {'Content-type': 'application/json'});
+                req.on('data', function (data) {
+                    body += data.toString();
+                });
+                req.on('end', function () {
+                    if (!BaseDeDonnees[pathBdd][body]) {
+                    BaseDeDonnees[pathBdd][body] = {};
+                    }
+                    res.end('{Table created}');
+                });
+            }
+            else if (req.method === 'PUT' && BaseDeDonnees[pathBdd]) {
+                var body = '';
+                res.writeHead(200, {'Content-type': 'application/json'});
+                req.on('data', function (data) {
+                    body += data.toString();
+                });
+                req.on('end', function () {
+                    BaseDeDonnees[body] = BaseDeDonnees[pathBdd];
+                    delete BaseDeDonnees[pathBdd];
+                    res.end('{bdd altered}');
+                });
+            }
+            else if (req.method === 'DELETE' && BaseDeDonnees[pathBdd]) {
+                res.writeHead(200, {'Content-type': 'application/json'});
+                req.on('end', function () {
+                    delete BaseDeDonnees[pathBdd];
+                    console.log(BaseDeDonnees);
+                    res.end('{bdd deleted}');
+                });
             }
         }
-        else if (req.method === 'POST' && BaseDeDonnees[pathBdd]) {
-            var body = '';
-            res.writeHead(200, {'Content-type': 'application/json'});
-            req.on('data', function (data) {
-                body += data.toString();
-            });
-            req.on('end', function () {
-                console.log(BaseDeDonnees[pathBdd]);
-                if (!BaseDeDonnees[pathBdd][body]) {
-                BaseDeDonnees[pathBdd][body] = {};
+        else if (pathTable !== '') {
+            if (req.method === 'GET') {
+                res.writeHead(200, {'Content-type': 'application/json'});
+                if (BaseDeDonnees[pathBdd]) {
+                    res.end(JSON.stringify(BaseDeDonnees[pathBdd][pathTable]));
+                } else {
+                    res.writeHead(404, {'Content-type': 'text/plain'});
+                    res.end('Not Found');
                 }
-                console.log(BaseDeDonnees);
-                res.end('{Table created}');
-            });
-        }
-        else if (req.method === 'PUT' && BaseDeDonnees[pathBdd]) {
-            var body = '';
-            res.writeHead(200, {'Content-type': 'application/json'});
-            req.on('data', function (data) {
-                body += data.toString();
-            });
-            req.on('end', function () {
-                BaseDeDonnees[body] = BaseDeDonnees[pathBdd];
-                delete BaseDeDonnees[pathBdd];
-                console.log(BaseDeDonnees);
-                res.end('{bdd altered}');
-            }); 
-        }
-        else if (req.method === 'DELETE' && BaseDeDonnees[pathBdd]) {
-            res.writeHead(200, {'Content-type': 'application/json'});
-            req.on('data', function () {});
-            req.on('end', function () {
-                delete BaseDeDonnees[pathBdd];
-                console.log(BaseDeDonnees);
-                res.end('{bdd deleted}');
-            });
+            }
+            if (req.method === 'POST') {
+                var body = '';
+                res.writeHead(200, {'Content-type': 'application/json'});
+                req.on('data', function (data) {
+                    body += data;
+                });
+                req.on('end', function () {
+                    if (!BaseDeDonnees[pathBdd][pathTable].rules) {
+                    BaseDeDonnees[pathBdd][pathTable].rules = body;
+                    }
+                    console.log(BaseDeDonnees[pathBdd][pathTable].rules);
+                    res.end('{rules created}');
+                });
+            }
         }
         else {
             res.writeHead(404, {'Content-type': 'text/plain'});
             res.end('Not Found');
         }
-  }
+    }
 });
 
 server.listen(8000);
