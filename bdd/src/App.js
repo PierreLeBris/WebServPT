@@ -4,21 +4,28 @@ import axios from "axios";
 function App() {
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get("http://localhost:8000");
-      setData(result.data);
-    };
+  const getBDD = () => {
+    axios({
+      method: 'GET',
+      url: 'http://localhost:8000'
+    }).then(res => {
+      console.log(res);
+      setData(res.data);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
 
-    fetchData();
-  }, []);
+  useEffect(() => {
+    getBDD()
+  }, [])
 
   return (
     <div>
       <h1>Base de Données</h1>
       <ul>
         {data.map((post) => (
-          <li key={post.id}>{post.title}</li>
+         <p>{post}</p>
         ))}
       </ul>
     </div>

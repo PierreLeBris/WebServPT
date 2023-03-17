@@ -9,7 +9,7 @@ var server = http.createServer(function (req, res) {
 
     if (!path || path === '/') {
         if (req.method === 'GET') {
-            res.writeHead(200, {'Content-type': 'application/json'});
+            res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
             if (BaseDeDonnees) {
                 const bddName = Object.keys(BaseDeDonnees);
                 res.end(JSON.stringify(bddName));
@@ -27,7 +27,7 @@ var server = http.createServer(function (req, res) {
             req.on('end', function () {
                 if (!body) {
                     res.writeHead(404, {'Content-type': 'text/plain'});
-                    res.end('{Error: Database name can not be empty}')
+                    res.end('{Error: Database name can not be empty}');
                 }
                 else {
                     if (!BaseDeDonnees[body]) {
