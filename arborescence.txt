@@ -18,7 +18,7 @@ bdd1
 {
     table1
     {
-        containtes
+        contraintes
         {
             /*la structure de ce qu'on stocke dans la table */
         }

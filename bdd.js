@@ -66,27 +66,37 @@ var server = http.createServer(function (req, res) {
             }
             else if (req.method === 'POST' && BaseDeDonnees[pathBdd]) {
                 var body = '';
-                res.writeHead(200, {'Content-type': 'application/json'});
                 req.on('data', function (data) {
                     body += data.toString();
                 });
                 req.on('end', function () {
                     if (!BaseDeDonnees[pathBdd][body]) {
-                    BaseDeDonnees[pathBdd][body] = {};
+                        BaseDeDonnees[pathBdd][body] = {};
+                        res.writeHead(200, {'Content-type': 'application/json'});
+                        res.end('{Table created}');
                     }
-                    res.end('{Table created}');
+                    else {
+                        res.writeHead(404, {'Content-type': 'application/json'});
+                        res.end('{Table already exist}')
+                    }
                 });
             }
             else if (req.method === 'PUT' && BaseDeDonnees[pathBdd]) {
                 var body = '';
-                res.writeHead(200, {'Content-type': 'application/json'});
                 req.on('data', function (data) {
                     body += data.toString();
                 });
                 req.on('end', function () {
-                    BaseDeDonnees[body] = BaseDeDonnees[pathBdd];
-                    delete BaseDeDonnees[pathBdd];
-                    res.end('{bdd altered}');
+                    if (!BaseDeDonnees[body]) {
+                        BaseDeDonnees[body] = BaseDeDonnees[pathBdd];
+                        delete BaseDeDonnees[pathBdd];
+                        res.writeHead(200, {'Content-type': 'application/json'});
+                        res.end('{bdd altered}');
+                    }
+                    else {
+                        res.writeHead(404, {'Content-type': 'application/json'});
+                        res.end('{There is database with this name}');
+                    }
                 });
             }
             else if (req.method === 'DELETE' && BaseDeDonnees[pathBdd]) {
