@@ -14,7 +14,7 @@ var server = http.createServer(function (req, res) {
                 const bddName = Object.keys(BaseDeDonnees);
                 res.end(JSON.stringify(bddName));
             } else {
-                res.writeHead(404, {'Content-type': 'text/plain'});
+                res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                 res.end('Not Found');
             }
         }
@@ -23,10 +23,10 @@ var server = http.createServer(function (req, res) {
             req.on('data', function (data) {
                 body += data.toString();
             });
-            res.writeHead(200, {'Content-type': 'text/plain'});
+            res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
             req.on('end', function () {
                 if (!body) {
-                    res.writeHead(404, {'Content-type': 'text/plain'});
+                    res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                     res.end('{Error: Database name can not be empty}');
                 }
                 else {
@@ -35,14 +35,14 @@ var server = http.createServer(function (req, res) {
                         res.end('{Database created}');
                     }
                     else {
-                        res.writeHead(404, {'Content-type': 'text/plain'});
+                        res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                         res.end('{DataBase already exist}');
                     }
                 }
             });
         }
         else {
-            res.writeHead(404, {'Content-type': 'text/plain'});
+            res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
             res.end('Not Found');
         }
 
@@ -56,11 +56,11 @@ var server = http.createServer(function (req, res) {
 
         if (pathTable === '') {
             if (req.method === 'GET') {
-                res.writeHead(200, {'Content-type': 'application/json'});
+                res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                 if (BaseDeDonnees[pathBdd]) {
                     res.end(JSON.stringify(BaseDeDonnees[pathBdd]));
                 } else {
-                    res.writeHead(404, {'Content-type': 'text/plain'});
+                    res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                     res.end('Not Found');
                 }
             }
@@ -72,16 +72,16 @@ var server = http.createServer(function (req, res) {
                 req.on('end', function () {
                     if (!BaseDeDonnees[pathBdd][body]) {
                         BaseDeDonnees[pathBdd][body] = {};
-                        res.writeHead(200, {'Content-type': 'application/json'});
+                        res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                         res.end('{Table created}');
                     }
                     else {
-                        res.writeHead(404, {'Content-type': 'application/json'});
+                        res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                         res.end('{Table already exist}')
                     }
                 });
             }
-            else if (req.method === 'PUT' && BaseDeDonnees[pathBdd]) {
+            /*else if (req.method === 'PUT' && BaseDeDonnees[pathBdd]) {
                 var body = '';
                 req.on('data', function (data) {
                     body += data.toString();
@@ -90,37 +90,36 @@ var server = http.createServer(function (req, res) {
                     if (!BaseDeDonnees[body]) {
                         BaseDeDonnees[body] = BaseDeDonnees[pathBdd];
                         delete BaseDeDonnees[pathBdd];
-                        res.writeHead(200, {'Content-type': 'application/json'});
+                        res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                         res.end('{bdd altered}');
                     }
                     else {
-                        res.writeHead(404, {'Content-type': 'application/json'});
+                        res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                         res.end('{There is database with this name}');
                     }
                 });
-            }
+            }*/
             else if (req.method === 'DELETE' && BaseDeDonnees[pathBdd]) {
-                res.writeHead(200, {'Content-type': 'application/json'});
-                req.on('end', function () {
-                    delete BaseDeDonnees[pathBdd];
-                    console.log(BaseDeDonnees);
-                    res.end('{bdd deleted}');
-                });
+                res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                BaseDeDonnees[pathBdd] = 0;
+                delete BaseDeDonnees[pathBdd];
+                console.log(BaseDeDonnees);
+                res.end('{bdd deleted}');
             }
         }
         else if (pathTable !== '') {
             if (req.method === 'GET') {
-                res.writeHead(200, {'Content-type': 'application/json'});
+                res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                 if (BaseDeDonnees[pathBdd]) {
                     res.end(JSON.stringify(BaseDeDonnees[pathBdd][pathTable]));
                 } else {
-                    res.writeHead(404, {'Content-type': 'text/plain'});
+                    res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                     res.end('Not Found');
                 }
             }
             if (req.method === 'POST') {
                 var body = '';
-                res.writeHead(200, {'Content-type': 'application/json'});
+                res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                 req.on('data', function (data) {
                     body += data;
                 });
@@ -134,7 +133,7 @@ var server = http.createServer(function (req, res) {
             }
         }
         else {
-            res.writeHead(404, {'Content-type': 'text/plain'});
+            res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
             res.end('Not Found');
         }
     }
