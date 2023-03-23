@@ -136,13 +136,17 @@ var server = http.createServer(function (req, res) {
                         var body = '';
                         res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                         req.on('data', function (data) {
-                            body += data;
+                            body += data.toString();
                         });
                         req.on('end', function () {
-                            if (BaseDeDonnees[pathBdd][pathTable].rules) {
-                                BaseDeDonnees[pathBdd][pathTable].rules = JSON.parse(body);
+                            if (Object.keys(BaseDeDonnees[pathBdd][pathTable].rules).length !== 0) {
+                                res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                                res.end('rules already exist');
                             }
-                            res.end('{rules created}');
+                            else {
+                                BaseDeDonnees[pathBdd][pathTable].rules = JSON.parse(body);
+                                res.end('{rules created}');
+                            }
                         });
                     }
                 break;
@@ -170,7 +174,7 @@ var server = http.createServer(function (req, res) {
                             req.on('end', function () {
                                 if ( hasSameProperties(JSON.parse(body), BaseDeDonnees[pathBdd][pathTable].rules) ) {
                                     res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
-                                    BaseDeDonnees[pathBdd][pathTable].data = JSON.parse(body);
+                                    BaseDeDonnees[pathBdd][pathTable].data += body;
                                     res.end('{data added}');
                                 }
                                 else {
