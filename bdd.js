@@ -118,8 +118,7 @@ var server = http.createServer(function (req, res) {
                     if (req.method === 'GET') {
                         res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                         if (BaseDeDonnees[pathBdd]) {
-                            const RulesContent = Object.keys(BaseDeDonnees[pathBdd][pathTable].rules);
-                            res.end(JSON.stringify(RulesContent));
+                            res.end(JSON.stringify(BaseDeDonnees[pathBdd][pathTable].rules));
                         } else {
                             res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                             res.end('Not Found');
@@ -152,7 +151,6 @@ var server = http.createServer(function (req, res) {
                         if (req.method === 'GET') {
                             res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                             if (BaseDeDonnees[pathBdd]) {
-                                console.log(BaseDeDonnees[pathBdd][pathTable].data);
                                 res.end(JSON.stringify(BaseDeDonnees[pathBdd][pathTable].data));
                             } else {
                                 res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
