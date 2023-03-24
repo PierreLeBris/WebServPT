@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 var http = require('http');
-var _ = require('lodash');
 
 var BaseDeDonnees = {};
 
@@ -84,7 +83,7 @@ var server = http.createServer(function (req, res) {
                 });
                 req.on('end', function () {
                     if (!BaseDeDonnees[pathBdd][body]) {
-                        BaseDeDonnees[pathBdd][body] = {'description':{}, 'rules':{} ,'data':{}};
+                        BaseDeDonnees[pathBdd][body] = {'config':{'lastId':0}, 'rules':{} ,'data':{}};
                         res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                         res.end('{Table created}');
                     }
@@ -98,7 +97,6 @@ var server = http.createServer(function (req, res) {
                 res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                 BaseDeDonnees[pathBdd] = 0;
                 delete BaseDeDonnees[pathBdd];
-                console.log(BaseDeDonnees);
                 res.end('{bdd deleted}');
             }
         }
@@ -116,17 +114,12 @@ var server = http.createServer(function (req, res) {
         }
         else if (pathTable !== '' && pathData !== '') {
             switch (pathData) {
-                case 'description':
-                    if (req.method === 'GET') {
-                        res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
-                    }
-                break;
                 case 'rules':
                     if (req.method === 'GET') {
                         res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                         if (BaseDeDonnees[pathBdd]) {
-                            const DataContent = Object.keys(BaseDeDonnees[pathBdd][pathTable].rules);
-                            res.end(JSON.stringify(DataContent));
+                            const RulesContent = Object.keys(BaseDeDonnees[pathBdd][pathTable].rules);
+                            res.end(JSON.stringify(RulesContent));
                         } else {
                             res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                             res.end('Not Found');
@@ -159,6 +152,7 @@ var server = http.createServer(function (req, res) {
                         if (req.method === 'GET') {
                             res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                             if (BaseDeDonnees[pathBdd]) {
+                                console.log(BaseDeDonnees[pathBdd][pathTable].data);
                                 res.end(JSON.stringify(BaseDeDonnees[pathBdd][pathTable].data));
                             } else {
                                 res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
@@ -169,12 +163,14 @@ var server = http.createServer(function (req, res) {
                             var body = '';
                             res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                             req.on('data', function (data) {
-                                body += data;
+                                body += data.toString();
                             });
                             req.on('end', function () {
                                 if ( hasSameProperties(JSON.parse(body), BaseDeDonnees[pathBdd][pathTable].rules) ) {
                                     res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
-                                    BaseDeDonnees[pathBdd][pathTable].data += body;
+                                    const increment = BaseDeDonnees[pathBdd][pathTable].config.lastId + 1;
+                                    BaseDeDonnees[pathBdd][pathTable].config.lastId = increment;
+                                    BaseDeDonnees[pathBdd][pathTable].data[increment] = JSON.parse(body);
                                     res.end('{data added}');
                                 }
                                 else {
