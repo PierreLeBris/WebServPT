@@ -1,14 +1,61 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 var http = require('http');
+const { writeFile } = require("fs");
 
 var BaseDeDonnees = {};
 
 function hasSameProperties(obj1, obj2 ) {
     return Object.keys( obj1 ).every( function( property ) {
-      return obj2.hasOwnProperty( property );
+    return obj2.hasOwnProperty( property );
+  });
+}
+
+function saveBDD(){
+    var now = new Date();
+    var logfile_name = './jsonfiles/logfile' + now.getDate() + "." + now.getMonth() + "." + now.getFullYear() + "." + now.getHours() + "-" + now.getMinutes() + '.json';
+    const bdd = {BaseDeDonnees}
+
+    writeFile(logfile_name, JSON.stringify(bdd, null, 2), (error) => {
+        if (error) {
+            console.log("An error has occurred ", error);
+            return;
+        }
+    console.log("Data written successfully to the file");
+  });
+}
+
+function deleteSave(){
+    const fs = require('fs');
+
+const folder = './jsonfiles';
+const maxFiles = 5;
+
+fs.readdir(folder, (err, files) => {
+  if (err) throw err;
+
+  // Remove any directories from the list of files
+  files = files.filter(file => !fs.statSync(`${folder}/${file}`).isDirectory());
+
+  // If there are too many files, remove the oldest one
+  if (files.length > maxFiles) {
+    files.sort((a, b) => {
+      return fs.statSync(`${folder}/${a}`).mtime.getTime() - fs.statSync(`${folder}/${b}`).mtime.getTime();
+    });
+
+    const oldestFile = files[0];
+    fs.unlink(`${folder}/${oldestFile}`, (err) => {
+      if (err) throw err;
+      console.log(`Deleted oldest file: ${oldestFile}`);
     });
   }
+});
+
+}
+
+setInterval(saveBDD, 5 * 60 * 1000);
+setInterval(deleteSave, 5 * 60 * 1000);
+
 
 var server = http.createServer(function (req, res) {
     var path = req.url.split('?')[0];
