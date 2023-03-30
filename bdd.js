@@ -3,8 +3,6 @@
 var http = require('http');
 const { writeFile } = require("fs");
 
-var BaseDeDonnees = {};
-
 function hasSameProperties(obj1, obj2 ) {
     return Object.keys( obj1 ).every( function( property ) {
     return obj2.hasOwnProperty( property );
@@ -53,9 +51,38 @@ fs.readdir(folder, (err, files) => {
 
 }
 
-setInterval(saveBDD, 5 * 60 * 1000);
-setInterval(deleteSave, 5 * 60 * 1000);
+function getNewFile(){
+const fs = require('fs');
+const path = require('path');
 
+const directoryPath = './jsonfiles'; // Remplacez cela par votre propre chemin d'accès au répertoire
+
+fs.readdir(directoryPath, (err, files) => {
+  if (err) {
+    console.log('Erreur lors de la lecture du répertoire', err);
+    return;
+  }
+
+  // Trier les fichiers par date de modification, le plus récent en dernier
+  files.sort((a, b) => {
+    return fs.statSync(path.join(directoryPath, a)).mtime.getTime() -
+           fs.statSync(path.join(directoryPath, b)).mtime.getTime();
+  });
+
+  // Le dernier fichier ajouté est le dernier élément du tableau "files"
+  const lastFile = files[files.length - 1];
+
+  console.log('Le dernier fichier ajouté est', lastFile);
+
+  return lastFile;
+});
+}
+
+setInterval(getNewFile, 1 * 60 * 1000)
+setInterval(saveBDD, 1 * 60 * 1000);
+setInterval(deleteSave, 1 * 60 * 1000);
+
+var BaseDeDonnees = {};
 
 var server = http.createServer(function (req, res) {
     var path = req.url.split('?')[0];
