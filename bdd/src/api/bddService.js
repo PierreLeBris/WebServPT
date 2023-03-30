@@ -32,10 +32,27 @@ const createTable = (bddname, tableName) => {
     })
 }
 
+const createRule = (bddName, tableName, rulesData) => {
+    return axios({
+        method: 'POST',
+        url: baseURL + bddName + '/' + tableName + '/rules',
+        data: rulesData
+    })
+}
+
+const getRule = (bddName, tableName) => {
+    return axios({
+        method: 'GET',
+        url: baseURL + bddName + '/' + tableName + '/rules',
+    })
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
     getBDD,
     createBDD,
     getTable,
-    createTable
+    createTable,
+    createRule,
+    getRule
 }

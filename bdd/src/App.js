@@ -55,7 +55,7 @@ function App() {
               name='bdd'
               type='text' />
             <StyledButton type="submit" color="primary">
-              Save
+              add new bdd
             </StyledButton>
           </Form>
         </Dialog>
@@ -98,7 +98,6 @@ const Button = styled.button`
 `;
 
 const Main = styled.div`
-width: 100vh;
 height: 100vh;
 display: flex;
 flex-direction: row;
