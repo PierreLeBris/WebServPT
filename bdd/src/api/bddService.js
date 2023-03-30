@@ -13,17 +13,29 @@ const createBDD = (bddname) => {
     return axios({
         method:'POST',
         url: baseURL,
-        headers: {
-            'Access-Control-Allow-Origin':'*',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-            'Content-type': 'application/json'
-        },
-        bddname,
+        data: bddname,
+    })
+}
+
+const getTable = (bddname) => {
+    return axios({
+        method: 'GET',
+        url: baseURL + bddname
+    })
+}
+
+const createTable = (bddname, tableName) => {
+    return axios({
+        method: 'POST',
+        url: baseURL + bddname,
+        data: tableName
     })
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
     getBDD,
-    createBDD
+    createBDD,
+    getTable,
+    createTable
 }
