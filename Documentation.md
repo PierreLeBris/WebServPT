@@ -64,7 +64,7 @@ Se mettre dans le body et écrire le nom de la table souhaitée (exemple : table
 
 `GET http://localhost:8000/base01/table01`
 
-Va donc lister les différents chemin possible dans la table
+Va donc lister les différents chemin possible dans la table.
 
 ### Result
 
@@ -78,9 +78,22 @@ Va donc lister les différents chemin possible dans la table
 
 ### Request
 
-`POST http://localhost:8000/base01/table01/rule`
+`POST http://localhost:8000/base01/table01/rules`
 
-se mettre dans le body et renvoyer un Json avec les différentes règles
+Se mettre dans le body et renvoyer un Json avec les différentes règles.
+
+### Exemple
+
+    {
+        "name" : "text",
+        "age" : "integer"
+    }
+
+### Result
+
+    {
+        rules created
+    }
 
 ## Pour créer de la data
 
