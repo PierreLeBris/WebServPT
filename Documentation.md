@@ -28,7 +28,7 @@ se mettre dans le body et renvoyer un Json avec les différentes règles
 
 `POST http://localhost:8000/base01/table01/data`
 
-### /!\/!\/!\ Attention /!\/!\/!\
+### '/!\ Attention /!\'
 
 pour créer de la donnée dans une table il faut bien respecter et avoir défini le modèle de donnée de la table au préalable.
 
