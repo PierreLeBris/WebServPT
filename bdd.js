@@ -25,56 +25,56 @@ function saveBDD(){
 
 function deleteSave(){
     const fs = require('fs');
+    const folder = './jsonfiles';
+    const maxFiles = 5;
 
-const folder = './jsonfiles';
-const maxFiles = 5;
+    fs.readdir(folder, (err, files) => {
+        if (err) throw err;
 
-fs.readdir(folder, (err, files) => {
-  if (err) throw err;
+    // Remove any directories from the list of files
+    files = files.filter(file => !fs.statSync(`${folder}/${file}`).isDirectory());
 
-  // Remove any directories from the list of files
-  files = files.filter(file => !fs.statSync(`${folder}/${file}`).isDirectory());
-
-  // If there are too many files, remove the oldest one
-  if (files.length > maxFiles) {
-    files.sort((a, b) => {
-      return fs.statSync(`${folder}/${a}`).mtime.getTime() - fs.statSync(`${folder}/${b}`).mtime.getTime();
+    // If there are too many files, remove the oldest one
+    if (files.length > maxFiles) {
+        files.sort((a, b) => {
+        return fs.statSync(`${folder}/${a}`).mtime.getTime() - fs.statSync(`${folder}/${b}`).mtime.getTime();
     });
 
     const oldestFile = files[0];
     fs.unlink(`${folder}/${oldestFile}`, (err) => {
-      if (err) throw err;
-      console.log(`Deleted oldest file: ${oldestFile}`);
-    });
-  }
+        if (err) throw err;
+        console.log(`Deleted oldest file: ${oldestFile}`);
+        });
+    }
 });
 
 }
 
 function getNewFile(){
-const fs = require('fs');
-const path = require('path');
 
-const directoryPath = './jsonfiles'; // Remplacez cela par votre propre chemin d'accès au répertoire
+    const fs = require('fs');
+    const path = require('path');
 
-fs.readdir(directoryPath, (err, files) => {
-  if (err) {
-    console.log('Erreur lors de la lecture du répertoire', err);
-    return;
-  }
+    const directoryPath = './jsonfiles';
 
-  // Trier les fichiers par date de modification, le plus récent en dernier
-  files.sort((a, b) => {
-    return fs.statSync(path.join(directoryPath, a)).mtime.getTime() -
-           fs.statSync(path.join(directoryPath, b)).mtime.getTime();
-  });
+    fs.readdir(directoryPath, (err, files) => {
+        if (err) {
+        console.log('Erreur lors de la lecture du répertoire', err);
+        return;
+    }
 
-  // Le dernier fichier ajouté est le dernier élément du tableau "files"
-  const lastFile = files[files.length - 1];
+    // Trier les fichiers par date de modification, le plus récent en dernier
+    files.sort((a, b) => {
+        return fs.statSync(path.join(directoryPath, a)).mtime.getTime() -
+        fs.statSync(path.join(directoryPath, b)).mtime.getTime();
+    });
 
-  console.log('Le dernier fichier ajouté est', lastFile);
+    // Le dernier fichier ajouté est le dernier élément du tableau "files"
+    const lastFile = files[files.length - 1];
 
-  return lastFile;
+    console.log('Le dernier fichier ajouté est', lastFile);
+
+    return lastFile;
 });
 }
 
