@@ -69,14 +69,72 @@ var server = http.createServer(function (req, res) {
             pathDataId = path.split('/')[4];
         }
 
+        if (req.method === "OPTIONS") {
+            if (pathTable === '') {
+                res.writeHead(204, {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET, POST, DELETE',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                  });
+                  res.end();
+            }
+            else if ( pathTable !== '' && pathData === '' ) {
+                res.writeHead(204, {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                  });
+                  res.end();
+            }
+            else if ( pathData !== '' && pathDataId === ''){
+                res.writeHead(204, {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET, POST',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                  });
+                  res.end();
+            }
+            else if ( pathTable !== '' && pathData !== '' ) {
+                switch (pathData) {
+                    case 'rules':
+                        res.writeHead(204, {
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'GET, POST',
+                            'Access-Control-Allow-Headers': 'Content-Type',
+                          });
+                          res.end();
+                    break;
+                
+                    case 'data':
+                        if (pathDataId === '') {
+                            res.writeHead(204, {
+                                'Access-Control-Allow-Origin': '*',
+                                'Access-Control-Allow-Methods': 'GET, POST',
+                                'Access-Control-Allow-Headers': 'Content-Type',
+                              });
+                              res.end();
+                        }
+                        else {
+                            res.writeHead(204, {
+                                'Access-Control-Allow-Origin': '*',
+                                'Access-Control-Allow-Methods': 'GET, PUT',
+                                'Access-Control-Allow-Headers': 'Content-Type',
+                              });
+                              res.end();
+                        }
+                    break;
+                }
+            }
+        }
+
         if (pathTable === '') {
             if (req.method === 'GET') {
-                res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                res.writeHead(200, {'Content-type': 'application/json'});
                 if (BaseDeDonnees[pathBdd]) {
                     const TableName = Object.keys(BaseDeDonnees[pathBdd]);
                     res.end(JSON.stringify(TableName));
                 } else {
-                    res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                    res.writeHead(404, {'Content-type': 'application/json'});
                     res.end('Not Found');
                 }
             }
@@ -88,17 +146,17 @@ var server = http.createServer(function (req, res) {
                 req.on('end', function () {
                     if (!BaseDeDonnees[pathBdd][body]) {
                         BaseDeDonnees[pathBdd][body] = {'config':{'lastId':0}, 'rules':{} ,'data':{}};
-                        res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                        res.writeHead(200, {'Content-type': 'application/json'});
                         res.end('{Table created}');
                     }
                     else {
-                        res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                        res.writeHead(404, {'Content-type': 'application/json'});
                         res.end('{Table already exist}');
                     }
                 });
             }
             else if (req.method === 'DELETE' && BaseDeDonnees[pathBdd]) {
-                res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                res.writeHead(200, {'Content-type': 'application/json'});
                 BaseDeDonnees[pathBdd] = 0;
                 delete BaseDeDonnees[pathBdd];
                 res.end('{bdd deleted}');
@@ -106,12 +164,12 @@ var server = http.createServer(function (req, res) {
         }
         else if (pathTable !== '' && pathData === '') {
             if (req.method === 'GET') {
-                res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                res.writeHead(200, {'Content-type': 'application/json'});
                 if (BaseDeDonnees[pathBdd]) {
                     const TableContent = Object.keys(BaseDeDonnees[pathBdd][pathTable]);
                     res.end(JSON.stringify(TableContent));
                 } else {
-                    res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                    res.writeHead(404, {'Content-type': 'application/json'});
                     res.end('Not Found');
                 }
             }
@@ -120,23 +178,23 @@ var server = http.createServer(function (req, res) {
             switch (pathData) {
                 case 'rules':
                     if (req.method === 'GET') {
-                        res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                        res.writeHead(200, {'Content-type': 'application/json'});
                         if (BaseDeDonnees[pathBdd]) {
                             res.end(JSON.stringify(BaseDeDonnees[pathBdd][pathTable].rules));
                         } else {
-                            res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                            res.writeHead(404, {'Content-type': 'application/json'});
                             res.end('Not Found');
                         }
                     }
                     else if (req.method === 'POST') {
                         var body = '';
-                        res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                        res.writeHead(200, {'Content-type': 'application/json'});
                         req.on('data', function (data) {
                             body += data.toString();
                         });
                         req.on('end', function () {
                             if (Object.keys(BaseDeDonnees[pathBdd][pathTable].rules).length !== 0) {
-                                res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                                res.writeHead(404, {'Content-type': 'application/json'});
                                 res.end('rules already exist');
                             }
                             else {
@@ -148,57 +206,57 @@ var server = http.createServer(function (req, res) {
                 break;
                 case 'data':
                     if (Object.keys(BaseDeDonnees[pathBdd][pathTable].rules).length === 0) {
-                        res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                        res.writeHead(404, {'Content-type': 'application/json'});
                         res.end('Please add rules before adding data');
                     }
                     else {
                         if (req.method === 'GET' && pathDataId === '') {
-                            res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                            res.writeHead(200, {'Content-type': 'application/json'});
                             if (BaseDeDonnees[pathBdd]) {
                                 res.end(JSON.stringify(BaseDeDonnees[pathBdd][pathTable].data));
                             } else {
-                                res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                                res.writeHead(404, {'Content-type': 'application/json'});
                                 res.end('Not Found');
                             }
                         }
-                        if (req.method === 'POST') {
+                        if (req.method === 'POST' && pathDataId === '') {
                             var body = '';
-                            res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                            res.writeHead(200, {'Content-type': 'application/json'});
                             req.on('data', function (data) {
                                 body += data.toString();
                             });
                             req.on('end', function () {
                                 if ( hasSameProperties(JSON.parse(body), BaseDeDonnees[pathBdd][pathTable].rules) ) {
-                                    res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                                    res.writeHead(200, {'Content-type': 'application/json'});
                                     const increment = BaseDeDonnees[pathBdd][pathTable].config.lastId + 1;
                                     BaseDeDonnees[pathBdd][pathTable].config.lastId = increment;
                                     BaseDeDonnees[pathBdd][pathTable].data[increment] = JSON.parse(body);
                                     res.end('{data added}');
                                 }
                                 else {
-                                    res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                                    res.writeHead(404, {'Content-type': 'application/json'});
                                     res.end('incorrect data structure');
                                 }
                             });
                         }
                         if (req.method === 'GET' && pathDataId !== '') {
-                            res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                            res.writeHead(200, {'Content-type': 'application/json'});
                             if (BaseDeDonnees[pathBdd]) {
                                 res.end(JSON.stringify(BaseDeDonnees[pathBdd][pathTable].data[pathDataId]));
                             } else {
-                                res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                                res.writeHead(404, {'Content-type': 'application/json'});
                                 res.end('Not Found');
                             }
                         }
                         if (req.method === "PUT" && pathDataId !== '') {
                             var body = '';
-                            res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                            res.writeHead(200, {'Content-type': 'application/json'});
                             req.on('data', function (data) {
                                 body += data.toString();
                             });
                             req.on('end', function(){
                                 if ( hasSameProperties(JSON.parse(body), BaseDeDonnees[pathBdd][pathTable].rules) ) {
-                                    res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                                    res.writeHead(200, {'Content-type': 'application/json'});
                                     BaseDeDonnees[pathBdd][pathTable].data[pathDataId] = JSON.parse(body);
                                     res.end('{data updated}');
                                 }
@@ -207,7 +265,6 @@ var server = http.createServer(function (req, res) {
                         if (req.method === "DELETE" && pathDataId !== '') {
                             res.writeHead(200, {'Content-type': 'application/json'});
                             delete BaseDeDonnees[pathBdd][pathTable].data[pathDataId];
-                            console.log(BaseDeDonnees);
                             res.end('{data deleted}');
                         }
                     }
