@@ -22,9 +22,9 @@ Se mettre dans le body et écrire le nom de la base souhaitée (exemple : base01
 
 ### Result
 
-{
-  Database created
-}
+  {
+    Database created
+  }
 
 Pour visualiser le contenu d'une base :
 
