@@ -78,12 +78,23 @@ function getNewFile(){
 });
 }
 
-setInterval(getNewFile, 1 * 60 * 1000)
+setImmediate(fusionJson);
+setImmediate(getNewFile);
 setInterval(saveBDD, 1 * 60 * 1000);
 setInterval(deleteSave, 1 * 60 * 1000);
 
-var BaseDeDonnees = {};
+var BaseDeDonnees = {  };
 
+function fusionJson(BaseDeDonnees){
+    let json1 = { BaseDeDonnees };
+    
+    let json2 = { getNewFile };
+    
+    let mergedJson = Object.assign({}, json1, json2);
+    
+    console.log(mergedJson);
+}
+    
 var server = http.createServer(function (req, res) {
     var path = req.url.split('?')[0];
 
