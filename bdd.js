@@ -81,6 +81,7 @@ setInterval(deleteSave, 1 * 60 * 1000);
     
 var server = http.createServer(function (req, res) {
     var path = req.url.split('?')[0];
+    var search = req.url.split('?')[1];
 
     if (!path || path === '/') {
         if (req.method === 'GET') {
@@ -279,7 +280,7 @@ var server = http.createServer(function (req, res) {
                         res.end('Please add rules before adding data');
                     }
                     else {
-                        if (pathDataId === '') {
+                        if (pathDataId === '' && (search === '' || !search)) {
                             if (req.method === 'GET') {
                                 res.writeHead(200, {'Content-type': 'application/json'});
                                 if (BaseDeDonnees[pathBdd]) {
@@ -340,6 +341,22 @@ var server = http.createServer(function (req, res) {
                                 delete BaseDeDonnees[pathBdd][pathTable].data[pathDataId];
                                 res.end('{data deleted}');
                             }  
+                        }
+                        else if (pathDataId === '' && search !== '' ) {
+                            if (req.method === "GET") {
+                                objectResult = {};
+                                objectTest = {}
+                                arrayParams = search.split('&');
+                                arrayParams.forEach(element => {
+                                    test = element.split('=')
+                                    objectTest[test[0]]=test[1]
+                                });
+                                console.log(objectTest);
+                               for (let index = 0; index < Object.keys(BaseDeDonnees[pathBdd][pathTable].data).length; index++) {
+                                
+                               }
+                               res.end('{test}');
+                           } 
                         }
                     }
                 break;
