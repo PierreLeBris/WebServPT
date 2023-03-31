@@ -23,7 +23,7 @@ Se mettre dans le body et écrire le nom de la base souhaitée (exemple : base01
 ### Result
 
     {
-      Database created
+        Database created
     }
 
 ## Pour visualiser le contenu d'une base
@@ -36,6 +36,14 @@ Va donc lister les différentes tables dans la base choisie.
 
 ### Result
 
+Si aucune table n'est créée 
+
+    []
+
+Si une table à été créée
+
+    
+
 ## Pour créer une table dans notre base
 
 ### Request
@@ -46,6 +54,10 @@ Se mettre dans le body et écrire le nom de la table souhaitée (exemple : table
 
 ### Result
 
+    {
+        Table created
+    }
+
 ## Pour visualiser le contenu d'une table
 
 ### Request
@@ -55,6 +67,12 @@ Se mettre dans le body et écrire le nom de la table souhaitée (exemple : table
 Va donc lister les différents chemin possible dans la table
 
 ### Result
+
+    [
+        "config",
+        "rules",
+        "data"
+    ]
 
 ## Pour créer un modèle de donnée
 
