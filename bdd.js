@@ -64,14 +64,17 @@ function getLastFileInFolder(folderPath) {
 var BaseDeDonnees = {};
 
 const lastFile = getLastFileInFolder(__dirname + "/jsonfiles");
-console.log(lastFile);
 
-fs.readFile(__dirname + "/jsonfiles" + "/" + lastFile, 'utf8', (err, data) => {
-    if (err) throw err;
-    dataReturned = JSON.parse(data);
-    //console.log(dataReturned.BaseDeDonnees);
-    BaseDeDonnees = dataReturned.BaseDeDonnees;
-});
+if (lastFile !== undefined) {
+    fs.readFile(__dirname + "/jsonfiles" + "/" + lastFile, 'utf8', (err, data) => {
+        if (err) throw err;
+        dataReturned = JSON.parse(data);
+        BaseDeDonnees = dataReturned.BaseDeDonnees;
+    });
+}
+else {
+    BaseDeDonnees = {};
+}
 
 setInterval(saveBDD, 1 * 60 * 1000);
 setInterval(deleteSave, 1 * 60 * 1000);
