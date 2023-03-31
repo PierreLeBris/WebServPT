@@ -2,6 +2,8 @@
 /* eslint-disable no-undef */
 var http = require('http');
 const { writeFile } = require("fs");
+const fs = require('fs');
+const path = require('path');
 
 function hasSameProperties(obj1, obj2 ) {
     return Object.keys( obj1 ).every( function( property ) {
@@ -50,50 +52,29 @@ function deleteSave(){
 
 }
 
-function getNewFile(){
-
-    const fs = require('fs');
-    const path = require('path');
-
-    const directoryPath = './jsonfiles';
-
-    fs.readdir(directoryPath, (err, files) => {
-        if (err) {
-        console.log('Erreur lors de la lecture du répertoire', err);
-        return;
-    }
-
-    // Trier les fichiers par date de modification, le plus récent en dernier
-    files.sort((a, b) => {
-        return fs.statSync(path.join(directoryPath, a)).mtime.getTime() -
-        fs.statSync(path.join(directoryPath, b)).mtime.getTime();
-    });
-
-    // Le dernier fichier ajouté est le dernier élément du tableau "files"
-    const lastFile = files[files.length - 1];
-
-    console.log('Le dernier fichier ajouté est', lastFile);
-
-    return lastFile;
-});
+function getLastFileInFolder(folderPath) {
+  const files = fs.readdirSync(folderPath);
+  const sortedFiles = files.sort((a, b) => {
+    return fs.statSync(path.join(folderPath, a)).mtime.getTime() -
+           fs.statSync(path.join(folderPath, b)).mtime.getTime();
+  });
+  return sortedFiles[sortedFiles.length - 1];
 }
 
-setImmediate(fusionJson);
-setImmediate(getNewFile);
+var BaseDeDonnees = {};
+
+const lastFile = getLastFileInFolder(__dirname + "/jsonfiles");
+console.log(lastFile);
+
+fs.readFile(__dirname + "/jsonfiles" + "/" + lastFile, 'utf8', (err, data) => {
+    if (err) throw err;
+    dataReturned = JSON.parse(data);
+    //console.log(dataReturned.BaseDeDonnees);
+    BaseDeDonnees = dataReturned.BaseDeDonnees;
+});
+
 setInterval(saveBDD, 1 * 60 * 1000);
 setInterval(deleteSave, 1 * 60 * 1000);
-
-var BaseDeDonnees = {  };
-
-function fusionJson(BaseDeDonnees){
-    let json1 = { BaseDeDonnees };
-    
-    let json2 = { getNewFile };
-    
-    let mergedJson = Object.assign({}, json1, json2);
-    
-    console.log(mergedJson);
-}
     
 var server = http.createServer(function (req, res) {
     var path = req.url.split('?')[0];
