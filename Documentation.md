@@ -1,6 +1,7 @@
 # Documentation d'utilisation de l'API
 
-Accès à l'API, visionnage de des différentes bases :
+## Accès à l'API, visionnage de des différentes bases
+
 `GET http://localhost:8000/`
 
 Pour créer une base :
@@ -25,8 +26,11 @@ se mettre dans le body et renvoyer un Json avec les différentes règles
 
 Pour créer de la data :
 `POST http://localhost:8000/base01/table01/data`
-/!\/!\/!\ Attention /!\/!\/!\\
+{
+    /!\/!\/!\ Attention /!\/!\/!\
+}
 pour créer de la donnée dans une table il faut bien respecter et avoir défini le modèle de donnée de la table au préalable.
-/!\/!\/!\ Attention /!\/!\/!\\
-se mettre dans le body et inscrire des donnnées qui respecte les règles.
+{
+    /!\/!\/!\ Attention /!\/!\/!\
+}se mettre dans le body et inscrire des donnnées qui respecte les règles.
 une fois la création de donnée effectuée un ID est donné automatiquement au groupe de donnée en question
