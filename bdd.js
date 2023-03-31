@@ -58,11 +58,15 @@ var server = http.createServer(function (req, res) {
         pathBdd = path.split('/')[1];
         pathTable = '';
         pathData = '';
+        pathDataId = '';
         if (path.split('/')[2]) {
             pathTable = path.split('/')[2];
         }
         if ( path.split('/')[3]) {
             pathData =  path.split('/')[3];
+        }
+        if (path.split('/')[4]) {
+            pathDataId = path.split('/')[4];
         }
 
         if (pathTable === '') {
@@ -148,7 +152,7 @@ var server = http.createServer(function (req, res) {
                         res.end('Please add rules before adding data');
                     }
                     else {
-                        if (req.method === 'GET') {
+                        if (req.method === 'GET' && pathDataId === '') {
                             res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
                             if (BaseDeDonnees[pathBdd]) {
                                 res.end(JSON.stringify(BaseDeDonnees[pathBdd][pathTable].data));
@@ -176,6 +180,35 @@ var server = http.createServer(function (req, res) {
                                     res.end('incorrect data structure');
                                 }
                             });
+                        }
+                        if (req.method === 'GET' && pathDataId !== '') {
+                            res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                            if (BaseDeDonnees[pathBdd]) {
+                                res.end(JSON.stringify(BaseDeDonnees[pathBdd][pathTable].data[pathDataId]));
+                            } else {
+                                res.writeHead(404, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                                res.end('Not Found');
+                            }
+                        }
+                        if (req.method === "PUT" && pathDataId !== '') {
+                            var body = '';
+                            res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                            req.on('data', function (data) {
+                                body += data.toString();
+                            });
+                            req.on('end', function(){
+                                if ( hasSameProperties(JSON.parse(body), BaseDeDonnees[pathBdd][pathTable].rules) ) {
+                                    res.writeHead(200, {'Content-type': 'application/json', 'Access-Control-Allow-Origin':'*'});
+                                    BaseDeDonnees[pathBdd][pathTable].data[pathDataId] = JSON.parse(body);
+                                    res.end('{data updated}');
+                                }
+                            })
+                        }
+                        if (req.method === "DELETE" && pathDataId !== '') {
+                            res.writeHead(200, {'Content-type': 'application/json'});
+                            delete BaseDeDonnees[pathBdd][pathTable].data[pathDataId];
+                            console.log(BaseDeDonnees);
+                            res.end('{data deleted}');
                         }
                     }
                 break;
