@@ -6,9 +6,9 @@
 
 `GET http://localhost:8000/`
 
-### Response
+### Result
 
-`[]`
+    []
 
 Ou en cas de sauvegarde effectuée contenu de la sauvegarde.
 
@@ -18,25 +18,29 @@ Ou en cas de sauvegarde effectuée contenu de la sauvegarde.
 
 `POST http://localhost:8000/`
 
-Se mettre dans le body et écrire le nom de la base souhaitée (exemple : base01)
+Se mettre dans le body et écrire le nom de la base souhaitée (exemple : base01).
 
 ### Result
 
-{
-  Database created
-}
+    {
+      Database created
+    }
 
-Pour visualiser le contenu d'une base :
+## Pour visualiser le contenu d'une base
+
+### Request
 
 `GET http://localhost:8000/base01`
 
-va donc lister les différentes tables dans la base choisie
+Va donc lister les différentes tables dans la base choisie.
 
-Pour créer une table dans notre base :
+### Result
+
+## Pour créer une table dans notre base
 
 `POST http://localhost:8000/base01`
 
-se mettre dans le body et écrire le nom de la table souhaitée (exemple : table01)
+Se mettre dans le body et écrire le nom de la table souhaitée (exemple : table01).
 
 Pour visualiser le contenu d'une table :
 
