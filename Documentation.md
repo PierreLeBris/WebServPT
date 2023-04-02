@@ -106,6 +106,23 @@ Se mettre dans le body et renvoyer un Json avec les différentes règles.
     {
         rules created
     }
+    
+## Pour visualiser le modèle de donnée
+
+### Request
+
+`GET http://localhost:8000/base01/table01/rules`
+
+`curl -X GET http://localhost:8000/base01/table01/rules`
+
+Exemple : name qui contient un texte et age qui contient un integer.
+
+### Result
+
+    {
+        "name": "text",
+        "age": "integer"
+    }
 
 ## Pour créer de la data
 
@@ -124,3 +141,80 @@ Se mettre dans le body et inscrire des donnnées qui respecte les règles.
 Une fois la création de donnée effectuée un ID est donné automatiquement au groupe de donnée en question.
 
 ### Result
+
+    {
+        data added
+    }
+
+## Pour récupérer les données
+
+### Request 
+
+`GET http://localhost:8000/base01/table01/data`
+
+`curl -X GET http://localhost:8000/base01/table01/data`
+    
+Va donc lister toutes les données présente dans la table.
+    
+### Result
+
+    {
+        "1": {
+                "name": "Thomas",
+                "age": "22"
+             }
+    }
+
+## Pour récupérer, modifier ou supprimer une donnée (et non toute la table)
+
+### Request
+
+`GET http://localhost:8000/base01/table01/data/1`
+
+`curl -X GET http://localhost:8000/base01/table01/data/1`
+
+Par exemple pour visualiser que le contenu avec l'ID 1 mettre l'ID après data.
+
+### Result
+
+    {
+        "name": "Thomas",
+        "age": "22"
+    }
+
+Modification d'une donnée dans la tables spécifier l'ID souhaité.
+
+Exemple :
+
+### Request
+
+`PUT http://localhost:8000/base01/table01/data/1`
+
+Pour la modifier se mettre dans le body écrire les nouvelles données souhaitées et respecter les règles mise en place.
+
+`curl -X PUT -d '{ "name" : "Pierre", "age" : "23" }' http://localhost:8000/base01/table01/data/1`
+
+### Result
+
+    {
+        data updated
+    }
+
+Supression d'une donnée souhaitée.
+
+### Request
+
+`DELETE http://localhost:8000/base01/table01/data/1`
+
+`curl -X DELETE http://localhost:8000/base01/table01/data/1`
+
+### Result
+
+    {
+        data deleted
+    }
+
+
+
+
+
