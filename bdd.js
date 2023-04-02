@@ -26,7 +26,6 @@ function saveBDD(){
 }
 
 function deleteSave(){
-    const fs = require('fs');
     const folder = './jsonfiles';
     const maxFiles = 5;
 
@@ -59,6 +58,10 @@ function getLastFileInFolder(folderPath) {
            fs.statSync(path.join(folderPath, b)).mtime.getTime();
   });
   return sortedFiles[sortedFiles.length - 1];
+}
+
+if (!fs.existsSync('./jsonfiles')) {
+    fs.mkdirSync('./jsonfiles');
 }
 
 var BaseDeDonnees = {};
