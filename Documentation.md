@@ -6,6 +6,8 @@
 
 `GET http://localhost:8000/`
 
+`curl -X GET http://localhost:8000/`
+
 ### Result
 
     []
@@ -34,6 +36,8 @@ Se mettre dans le body et écrire le nom de la base souhaitée (exemple : base01
 
 `GET http://localhost:8000/base01`
 
+`curl -X GET http://localhost:8000/base01`
+
 Va donc lister les différentes tables dans la base choisie.
 
 ### Result
@@ -54,6 +58,8 @@ Si une table à été créée
 
 Se mettre dans le body et écrire le nom de la table souhaitée (exemple : table01).
 
+`curl -X POST -d 'table01' http://localhost:8000/base01`
+
 ### Result
 
     {
@@ -65,6 +71,8 @@ Se mettre dans le body et écrire le nom de la table souhaitée (exemple : table
 ### Request
 
 `GET http://localhost:8000/base01/table01`
+
+`curl -X GET http://localhost:8000/base01/table01`
 
 Va donc lister les différents chemin possible dans la table.
 
@@ -83,6 +91,8 @@ Va donc lister les différents chemin possible dans la table.
 `POST http://localhost:8000/base01/table01/rules`
 
 Se mettre dans le body et renvoyer un Json avec les différentes règles.
+
+`curl -X POST -d '{ "name" : "text", "age" : "integer" }' http://localhost:8000/base01/table01/rules`
 
 ### Exemple
 
@@ -108,6 +118,8 @@ Se mettre dans le body et renvoyer un Json avec les différentes règles.
 Pour créer de la donnée dans une table il faut bien respecter et avoir défini le modèle de donnée de la table au préalable.
 
 Se mettre dans le body et inscrire des donnnées qui respecte les règles.
+
+`curl -X POST -d '{ "name" : "Thomas", "age" : "22" }' http://localhost:8000/base01/table01/data`
 
 Une fois la création de donnée effectuée un ID est donné automatiquement au groupe de donnée en question.
 
