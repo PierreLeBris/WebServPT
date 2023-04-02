@@ -20,6 +20,8 @@ Ou en cas de sauvegarde effectuée contenu de la sauvegarde.
 
 Se mettre dans le body et écrire le nom de la base souhaitée (exemple : base01).
 
+`curl -X POST -d 'base01' http://localhost:8000/`
+
 ### Result
 
     {
