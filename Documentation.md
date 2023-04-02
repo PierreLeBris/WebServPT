@@ -42,11 +42,9 @@ Va donc lister les différentes tables dans la base choisie.
 
 ### Result
 
-Si aucune table n'est créée 
-
-    []
-
-Si une table à été créée
+    [
+        "table01"
+    ]
 
     
 
