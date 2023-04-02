@@ -74,6 +74,10 @@ Se mettre dans le body et écrire le nom de la table souhaitée (exemple : table
 
 Va donc lister les différents chemin possible dans la table.
 
+Rules : affiche le modèle de donnée de la table
+
+Data : affiche les données de la table
+
 ### Result
 
     [
@@ -113,7 +117,9 @@ Se mettre dans le body et renvoyer un Json avec les différentes règles.
 
 `curl -X GET http://localhost:8000/base01/table01/rules`
 
-Exemple : name qui contient un texte et age qui contient un integer.
+### Exemple 
+
+    name qui contient un texte et age qui contient un integer.
 
 ### Result
 
@@ -124,13 +130,13 @@ Exemple : name qui contient un texte et age qui contient un integer.
 
 ## Pour créer de la data
 
-### Request 
-
-`POST http://localhost:8000/base01/table01/data`
-
 ### /!\ Attention /!\\
 
 Pour créer de la donnée dans une table il faut bien respecter et avoir défini le modèle de donnée de la table au préalable.
+
+### Request 
+
+`POST http://localhost:8000/base01/table01/data`
 
 Se mettre dans le body et inscrire des donnnées qui respecte les règles.
 
@@ -180,9 +186,7 @@ Par exemple pour visualiser que le contenu avec l'ID 1 mettre l'ID après data.
         "age": "22"
     }
 
-Modification d'une donnée dans la tables spécifier l'ID souhaité.
-
-Exemple :
+### Modification d'une donnée dans la tables spécifier l'ID souhaité.
 
 ### Request
 
@@ -198,7 +202,7 @@ Pour la modifier se mettre dans le body écrire les nouvelles données souhaité
         data updated
     }
 
-Supression d'une donnée souhaitée.
+### Supression d'une donnée souhaitée.
 
 ### Request
 
@@ -212,7 +216,10 @@ Supression d'une donnée souhaitée.
         data deleted
     }
 
+# Sauvegarde
 
+Étant une base de donnée in-memory un système de sauvegarde asynchrone à été mis en place.
+Donc tout des X minutes (peut être modifié dans le code) créer un fichier Json avec le contenu de la base au complet.
 
 
 
