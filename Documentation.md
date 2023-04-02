@@ -12,7 +12,7 @@
 
     []
 
-Ou en cas de sauvegarde effectuée contenu de la sauvegarde.
+Ou en cas de sauvegarde effectuée affichera le contenu de la sauvegarde.
 
 ## Pour créer une base
 
