@@ -32,10 +32,8 @@ function deleteSave(){
     fs.readdir(folder, (err, files) => {
         if (err) throw err;
 
-    // Remove any directories from the list of files
     files = files.filter(file => !fs.statSync(`${folder}/${file}`).isDirectory());
 
-    // If there are too many files, remove the oldest one
     if (files.length > maxFiles) {
         files.sort((a, b) => {
         return fs.statSync(`${folder}/${a}`).mtime.getTime() - fs.statSync(`${folder}/${b}`).mtime.getTime();
